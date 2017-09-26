@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
         switch (dropDown.value)
         {
             case 0:
-                inputController.SetStrategy(InputType.Fire);
+                inputController.SetStrategy(InputType.Normal);
                 StrategyNormal strategyNormal = (StrategyNormal)inputController.currentStrategy;
                 strategyNormal.inputFire.fireAction += PlayerFire;
                 break;

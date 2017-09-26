@@ -26,24 +26,31 @@ public class InputFire : MonoBehaviour
 
     public void StartFire()
     {
+        isLongPress = false;
         Co_Fire = StartCoroutine(FireCoroutine());
     }
 
+    private bool isLongPress;
     IEnumerator FireCoroutine()
     {
         animator.SetBool("TouchDown", true);
         while (true)
         {
+            yield return new WaitForSeconds(coldTime);
+            isLongPress = true;
             if (fireAction != null)
                 fireAction();
-            yield return new WaitForSeconds(coldTime);
         }
     }
 
     public void StopFire()
     {
+        if (!isLongPress)
+            if (fireAction != null)
+                fireAction();
+        
         Co_Fire = null;
         animator.SetBool("TouchDown", false);
-        StopAllCoroutines();
+        isLongPress = false;
     }
 }

@@ -4,14 +4,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+/// <summary>
+/// 实现方式改为通过蓄力时间来调整， 所以之前的方式一和二可能会过期
+/// </summary>
 public class InputCharge : MonoBehaviour
 {
-    //最大蓄力值
-    public float max_Force;
-    //每秒蓄力增量
-    public float delta_Force;
+    //最小蓄力时间
+    public float min_Time;
 
-    public float delta_Time = 1f;
+//实现方式一
+//    //每秒蓄力增量
+//    public float delta_Force;
+//
+//    public float delta_Time = 1f;
 
 //============================实现方式二==================================
 //    private float startTime;
@@ -24,7 +29,7 @@ public class InputCharge : MonoBehaviour
 
     public Image backImage;
 
-    private float chargedForce;
+    private float chargedTime;
 
     private Coroutine _Co_Charge;
     private Coroutine Co_Charge
@@ -40,7 +45,7 @@ public class InputCharge : MonoBehaviour
 
     public void StartCharge()
     {
-        chargedForce = 0;
+        chargedTime = 0;
         backImage.fillAmount = 0;
         Co_Charge = StartCoroutine(ChargeCoroutine());
         //========实现方式二================
@@ -91,23 +96,23 @@ public class InputCharge : MonoBehaviour
         //============================实现方式三==================================
         while (true)
         {
-            if (chargedForce < max_Force)
+            if (chargedTime < min_Time)
             {
-                chargedForce += Time.deltaTime*timeScale;
-                //9.5+5>10, 如果没有预防， 那么会出现有一帧的蓄力值大于最大值
-                if (chargedForce >= max_Force)
-                    chargedForce = max_Force;
+                chargedTime += Time.deltaTime*timeScale;
+                //9.5+5>10, 如果没有预防， 那么会出现有一帧的蓄力时间大于最大值
+                if (chargedTime >= min_Time)
+                    chargedTime = min_Time;
             }
             else
-                chargedForce = max_Force;
-            backImage.fillAmount += Time.deltaTime*timeScale;
+                chargedTime = min_Time;
+            backImage.fillAmount = chargedTime / min_Time;
             yield return null;
         }
     }
 
     public void StopCharge()
     {
-        if (chargedForce < 1)
+        if (chargedTime < 1)
         {
             //玩家取消选中目标
         }
@@ -115,10 +120,10 @@ public class InputCharge : MonoBehaviour
         {
             //玩家确定选中目标， 并开火
             if (fireAction != null)
-                fireAction(chargedForce);   
+                fireAction(chargedTime);   
         }
         Co_Charge = null;
-        chargedForce = 0;
+        chargedTime = 0;
         backImage.fillAmount = 0;
         //========实现方式二================
 //        startTime = 0;

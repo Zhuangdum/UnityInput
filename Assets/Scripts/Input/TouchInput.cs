@@ -25,7 +25,7 @@ public class TouchInput : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     //开始拖拽
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("start drag");
+//        Debug.Log("start drag");
         //deadzone
         startPos = eventData.position;
         if (OnDragEvent != null)
@@ -46,7 +46,7 @@ public class TouchInput : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     //结束拖拽
     public virtual void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("end drag");
+//        Debug.Log("end drag");
         //deadzone
         startPos = Vector2.zero;
         if (OnEndDragEvent != null)
